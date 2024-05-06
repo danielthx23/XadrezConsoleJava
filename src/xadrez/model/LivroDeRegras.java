@@ -1,76 +1,113 @@
 package xadrez.model;
 
+import xadrez.controller.XadrezController;
+
 public class LivroDeRegras {
 
-    private int contaJogada = 1;
+	protected static int contaJogadas = 0;
+	private String jogador = "";
 
-    public void verificarJogada(String notacao) {
+	public int getContaJogadas() {
+		return contaJogadas;
+	}
 
-        if (!notacao.contains("x")) {
-            String peca = notacao.substring(0, 1);
-            char coluna = notacao.charAt(1);
-            int linha = Integer.parseInt(notacao.substring(2, 3));
-            int chaveLinha = 0;
-            boolean caminhoLimpo = false;
-            int linhaTorre = 0;
+	public String getJogador() {
+		if (contaJogadas % 2 == 0) {
+			jogador = "Branco";
+		} else {
+			jogador = "Preto";
+		}
+		return jogador;
+	}
 
-            if (Tabuleiro.tabuleiro.get("" + coluna + linha).equals(" ")) {
-                if (peca.equals("P") && Tabuleiro.tabuleiro.get("" + coluna + (linha - 1)).equals("P")) {
-                    Tabuleiro.tabuleiro.replace("" + coluna + (linha - 1), " ");
-                    Tabuleiro.tabuleiro.replace("" + coluna + linha, "P");
-                    contaJogada++;
-                } else if ((peca.equals("P") && linha == 4)
-                        && Tabuleiro.tabuleiro.get("" + coluna + (linha - 2)).equals("P")) {
-                    Tabuleiro.tabuleiro.replace("" + coluna + (linha - 2), " ");
-                    Tabuleiro.tabuleiro.replace("" + coluna + linha, "P");
-                    contaJogada++;
-                } else if (peca.equals("R")) {
-                    // Verificar movimento para cima (linhas superiores)
-                    for (linhaTorre = linha; linhaTorre >= 1; linhaTorre--) {
-                        if (Tabuleiro.tabuleiro.get("" + coluna + linhaTorre).equals("R")) {
-                            chaveLinha = linhaTorre;
-                        }
-                    }
-                    for (linhaTorre = linha; linhaTorre > chaveLinha; linhaTorre--) {
-                        if (Tabuleiro.tabuleiro.get("" + coluna + linhaTorre).equals(" ")) {
-                            caminhoLimpo = true;
-                        } else {
-                            caminhoLimpo = false;
-                            break; // Se encontrar uma peça no caminho, pare de verificar
-                        }
-                    }
-                    // Verificar movimento para baixo (linhas inferiores)
-                    if (caminhoLimpo) {
-                        for (linhaTorre = linha; linhaTorre <= 8; linhaTorre++) {
-                            if (Tabuleiro.tabuleiro.get("" + coluna + linhaTorre).equals("R")) {
-                                chaveLinha = linhaTorre;
-                            }
-                        }
-                        for (linhaTorre = linha; linhaTorre < chaveLinha; linhaTorre++) {
-                            if (Tabuleiro.tabuleiro.get("" + coluna + linhaTorre).equals(" ")) {
-                                caminhoLimpo = true;
-                            } else {
-                                caminhoLimpo = false;
-                                break; // Se encontrar uma peça no caminho, pare de verificar
-                            }
-                        }
-                    }
-                    if (caminhoLimpo) {
-                        Tabuleiro.tabuleiro.replace("" + coluna + chaveLinha, " ");
-                        Tabuleiro.tabuleiro.replace("" + coluna + linha, "R");
-                    }
-                } else if (peca.equals("N")) {
+	public void verificarJogada(String notacao) {
 
-                }
-            }
-        }
-    }
+		XadrezController controlPecas = new XadrezController();
+		String peca = "", vez = "";
+		char coluna = ' ';
+		int linha = 0;
+		boolean reiBranco = false, reiPreto = false;
 
-    public int getContaJogada() {
-        return contaJogada;
-    }
+		if (!notacao.contains("x")) {
+			peca = notacao.substring(0, 1);
+			coluna = notacao.charAt(1);
+			linha = Integer.parseInt(notacao.substring(2, 3));
+		} else if (notacao.contains("x")) {
+			peca = notacao.substring(0, 1);
+			coluna = notacao.charAt(2);
+			linha = Integer.parseInt(notacao.substring(3, 4));
+		}
 
-    public void setContaJogada(int contaJogada) {
-        this.contaJogada = contaJogada;
-    }
+		if (contaJogadas % 2 == 0) {
+			vez = "W";
+		} else {
+			vez = "B";
+		}
+
+		try {
+
+			if (!Tabuleiro.tabuleiro.get("" + coluna + linha).contains(vez)) {
+
+				switch (peca) {
+				case "P": {
+					if (Tabuleiro.tabuleiro.get("" + coluna + linha).equals("  ") && !notacao.contains("x")) {
+						controlPecas.moverPeao(coluna, linha, vez);
+					} else if (!Tabuleiro.tabuleiro.get("" + coluna + linha).equals("  ") && notacao.contains("x")) {
+						controlPecas.capturaPeao(coluna, linha, vez);
+					}
+					break;
+				}
+				case "R": {
+					controlPecas.moverTorre(coluna, linha, vez);
+
+					break;
+				}
+				case "N": {
+					controlPecas.moverCavalo(coluna, linha, vez);
+
+					break;
+				}
+				case "B": {
+					controlPecas.moverBispo(coluna, linha, vez);
+
+					break;
+				}
+
+				case "K": {
+					controlPecas.moverRei(coluna, linha, vez);
+
+					break;
+				}
+
+				case "Q": {
+					controlPecas.moverRainha(coluna, linha, vez);
+
+					break;
+				}
+
+				default:
+					throw new Exception("Unexpected value: " + peca);
+				}
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		for (String pecas : Tabuleiro.tabuleiro.keySet()) {
+			if (Tabuleiro.tabuleiro.get(pecas).equals("BK")) {
+				reiPreto = true;
+			} else if (Tabuleiro.tabuleiro.get(pecas).equals("WK")) {
+				reiBranco = true;
+			}
+		}
+
+		if (reiBranco == false) {
+			System.out.println("Preto ganhou!");
+			Tabuleiro.recomecar();
+		} else if (reiPreto == false) {
+			System.out.println("Branco ganhou!");
+			Tabuleiro.recomecar();
+		}
+
+	}
 }
