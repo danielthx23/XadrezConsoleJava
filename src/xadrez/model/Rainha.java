@@ -3,6 +3,7 @@ package xadrez.model;
 public final class Rainha extends Peca {
 
 	public void moverBispo(char coluna, int linha, String vez, String tipoPeca) {
+		caminhoLimpo = false;
 		int[][] bispoDesvios = { { -1, -1 }, { -1, 1 }, { 1, -1 }, { 1, 1 } };
 
 		for (int[] desvio : bispoDesvios) {
@@ -49,10 +50,12 @@ public final class Rainha extends Peca {
 				if (linhaPeca >= 1 && linhaPeca <= 8 && colunaPeca >= 'a' && colunaPeca <= 'h') {
 					String bispoPossivelPosicao = "" + colunaPeca + linhaPeca;
 					String elementoPossivelPosicao = Tabuleiro.tabuleiro.get(bispoPossivelPosicao);
+					
+					System.out.println(bispoPossivelPosicao);
+					System.out.println(caminhoLimpo);
 
 					if (elementoPossivelPosicao.equals("  ") && !("" + chaveColuna + chaveLinha).equals("a0")) {
 						caminhoLimpo = true;
-						break;
 					}
 				} else {
 					caminhoLimpo = false;
@@ -69,6 +72,7 @@ public final class Rainha extends Peca {
 			Tabuleiro.tabuleiro.replace("" + chaveColuna + chaveLinha, "  ");
 			Tabuleiro.tabuleiro.replace("" + coluna + linha, vez + tipoPeca);
 			LivroDeRegras.contaJogadas++;
+			LivroDeRegras.historico += vez + coluna + linha + tipoPeca + " ";
 		}
 	}
 
@@ -78,6 +82,8 @@ public final class Rainha extends Peca {
 	
 	
 	public void moverTorre(char coluna, int linha, String vez, String tipoPeca) {
+		caminhoLimpo = false;
+		
 		for (linhaPeca = linha; linhaPeca >= 1 && linhaPeca <= 8; linhaPeca += (linha > 1) ? -1 : 1) {
 			if (Tabuleiro.tabuleiro.containsKey("" + coluna + linhaPeca)
 					&& Tabuleiro.tabuleiro.get("" + coluna + linhaPeca).equals(vez + tipoPeca)) {
@@ -116,6 +122,7 @@ public final class Rainha extends Peca {
 				Tabuleiro.tabuleiro.replace("" + chaveColuna + linha, "  ");
 				Tabuleiro.tabuleiro.replace("" + coluna + linha, vez + tipoPeca);
 				LivroDeRegras.contaJogadas++;
+				LivroDeRegras.historico += vez + coluna + linha + tipoPeca + " ";
 			}
 		}
 
@@ -136,6 +143,7 @@ public final class Rainha extends Peca {
 				Tabuleiro.tabuleiro.replace("" + coluna + chaveLinha, "  ");
 				Tabuleiro.tabuleiro.replace("" + coluna + linha, vez + tipoPeca);
 				LivroDeRegras.contaJogadas++;
+				LivroDeRegras.historico += vez + coluna + linha + tipoPeca + " ";
 			}
 		}
 	}

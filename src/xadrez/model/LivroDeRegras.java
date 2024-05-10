@@ -5,6 +5,7 @@ import xadrez.controller.XadrezController;
 public class LivroDeRegras {
 
 	protected static int contaJogadas = 0;
+	protected static String historico = "";
 	private String jogador = "";
 
 	public int getContaJogadas() {
@@ -58,29 +59,49 @@ public class LivroDeRegras {
 					break;
 				}
 				case "R": {
-					controlPecas.moverTorre(coluna, linha, vez);
+					if (Tabuleiro.tabuleiro.get("" + coluna + linha).equals("  ") && !notacao.contains("x")) {
+						controlPecas.moverTorre(coluna, linha, vez);
+					} else if (!Tabuleiro.tabuleiro.get("" + coluna + linha).equals("  ") && notacao.contains("x")) {
+						controlPecas.moverTorre(coluna, linha, vez);
+					}
 
 					break;
 				}
 				case "N": {
-					controlPecas.moverCavalo(coluna, linha, vez);
+					if (Tabuleiro.tabuleiro.get("" + coluna + linha).equals("  ") && !notacao.contains("x")) {
+						controlPecas.moverCavalo(coluna, linha, vez);
+					} else if (!Tabuleiro.tabuleiro.get("" + coluna + linha).equals("  ") && notacao.contains("x")) {
+						controlPecas.moverCavalo(coluna, linha, vez);
+					}
 
 					break;
 				}
 				case "B": {
-					controlPecas.moverBispo(coluna, linha, vez);
+					if (Tabuleiro.tabuleiro.get("" + coluna + linha).equals("  ") && !notacao.contains("x")) {
+						controlPecas.moverBispo(coluna, linha, vez);
+					} else if (!Tabuleiro.tabuleiro.get("" + coluna + linha).equals("  ") && notacao.contains("x")) {
+						controlPecas.moverBispo(coluna, linha, vez);
+					}
 
 					break;
 				}
 
 				case "K": {
-					controlPecas.moverRei(coluna, linha, vez);
+					if (Tabuleiro.tabuleiro.get("" + coluna + linha).equals("  ") && !notacao.contains("x")) {
+						controlPecas.moverRei(coluna, linha, vez);
+					} else if (!Tabuleiro.tabuleiro.get("" + coluna + linha).equals("  ") && notacao.contains("x")) {
+						controlPecas.moverRei(coluna, linha, vez);
+					}
 
 					break;
 				}
 
 				case "Q": {
-					controlPecas.moverRainha(coluna, linha, vez);
+					if (Tabuleiro.tabuleiro.get("" + coluna + linha).equals("  ") && !notacao.contains("x")) {
+						controlPecas.moverRainha(coluna, linha, vez);
+					} else if (!Tabuleiro.tabuleiro.get("" + coluna + linha).equals("  ") && notacao.contains("x")) {
+						controlPecas.moverRainha(coluna, linha, vez);
+					}
 
 					break;
 				}
@@ -90,7 +111,7 @@ public class LivroDeRegras {
 				}
 			}
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			System.err.println("Notação inválida");
 		}
 
 		for (String pecas : Tabuleiro.tabuleiro.keySet()) {
@@ -100,12 +121,23 @@ public class LivroDeRegras {
 				reiBranco = true;
 			}
 		}
+		
+		int placarPreto = 0;
+		int placarBranco = 0;
 
 		if (reiBranco == false) {
-			System.out.println("Preto ganhou!");
+			contaJogadas = 0;
+			System.out.println("Preto ganhou!\n");
+			placarPreto++;
+			System.out.println(placarPreto + " - " + placarBranco + "\n");
+			System.out.println(historico + "\n");
 			Tabuleiro.recomecar();
 		} else if (reiPreto == false) {
-			System.out.println("Branco ganhou!");
+			contaJogadas = 0;
+			System.out.println("Branco ganhou!\n");
+			placarBranco++;
+			System.out.println(placarPreto + " - " + placarBranco + "\n");
+			System.out.println(historico + "\n");
 			Tabuleiro.recomecar();
 		}
 

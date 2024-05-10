@@ -22,6 +22,7 @@ public final class Rei extends Peca {
 					Tabuleiro.tabuleiro.replace("" + coluna + linha, vez + "K");
 					Tabuleiro.tabuleiro.replace("" + reiPossivelPosicao, "  ");
 					LivroDeRegras.contaJogadas++;
+					LivroDeRegras.historico += vez + coluna + linha + "K" + " ";
 					break;
 				}
 			} else {

@@ -23,6 +23,7 @@ public final class Cavalo extends Peca {
 					Tabuleiro.tabuleiro.replace("" + coluna + linha, vez + "N");
 					Tabuleiro.tabuleiro.replace("" + cavaloPossiveisPosicoes, "  ");
 					LivroDeRegras.contaJogadas++;
+					LivroDeRegras.historico += vez + coluna + linha + "N" + " ";
 					break;
 				}
 			} else {

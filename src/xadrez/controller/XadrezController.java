@@ -45,8 +45,8 @@ public class XadrezController implements XadrezRepository {
 
 	@Override
 	public void moverRainha(char coluna, int linha, String vez) {
-		rainha.moverTorre(coluna, linha, vez, "Q");
 		rainha.moverBispo(coluna, linha, vez, "Q");
+		rainha.moverTorre(coluna, linha, vez, "Q");
 	}
 
 }
